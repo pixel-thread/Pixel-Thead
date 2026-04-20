@@ -15,9 +15,11 @@ export const withLogging: ProxyFactory = (next: NextMiddleware) => {
     const response = await next(request, _next);
 
     const duration = Date.now() - start;
-    console.log(
-      `[Proxy] ${method} ${nextUrl.pathname} completed in ${duration}ms`
-    );
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `[Proxy] ${method} ${nextUrl.pathname} completed in ${duration}ms`
+      );
+    }
 
     return response;
   };
