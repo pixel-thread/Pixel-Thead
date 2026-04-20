@@ -1,10 +1,11 @@
 import { serve } from "@hono/node-server";
-import app from "./index";
 import { env } from "../shared/config/env";
+import type { Hono } from "hono";
 
-const port = env.PORT;
+export const startServer = (app: Hono<any>) => {
+  const port = env.PORT;
 
-console.log(`
+  console.log(`
 ╔══════════════════════════════════════════════════╗
 ║   Central Payments & Auth Service v1.1.0         ║
 ║   Environment: ${env.NODE_ENV.padEnd(33)}║
@@ -12,7 +13,8 @@ console.log(`
 ╚══════════════════════════════════════════════════╝
 `);
 
-serve({
-  fetch: app.fetch,
-  port,
-});
+  serve({
+    fetch: app.fetch,
+    port,
+  });
+};
