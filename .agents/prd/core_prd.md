@@ -315,45 +315,6 @@ src/
 
 ## 7. Environment Configuration
 
-### `.env` File (Full Reference)
-
-```env
-# -- Server ---------------------------------------------------
-PORT=3000
-NODE_ENV=development
-SERVICE_BASE_URL=https://pay.yourapi.com
-
-# -- Database (Prisma + PostgreSQL) ---------------------------
-DATABASE_URL="postgresql://user:password@localhost:5432/payments_db?schema=public"
-
-# For production with a connection pooler (PgBouncer / Supabase):
-# DATABASE_URL="postgresql://user:password@host:6543/payments_db?pgbouncer=true"
-# DIRECT_URL="postgresql://user:password@host:5432/payments_db"
-# DIRECT_URL is used by Prisma Migrate to bypass the pooler
-
-# -- Razorpay -------------------------------------------------
-RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxxxx
-RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxxxx
-RAZORPAY_WEBHOOK_SECRET=your_webhook_secret_here
-RAZORPAY_BASE_URL=https://api.razorpay.com/v1
-
-# -- Clerk ----------------------------------------------------
-CLERK_SECRET_KEY=sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-CLERK_PUBLISHABLE_KEY=pk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-CLERK_JWT_ISSUER=https://clerk.your-domain.com
-
-# -- CORS -----------------------------------------------------
-ALLOWED_ORIGINS=https://app1.com,https://app2.com,https://mobile.app.com
-
-# -- Rate Limiting --------------------------------------------
-RATE_LIMIT_WINDOW_MS=60000
-RATE_LIMIT_MAX_REQUESTS=100
-
-# -- Logging --------------------------------------------------
-LOG_LEVEL=info
-LOG_FORMAT=json
-```
-
 ### `shared/config/env.ts`
 
 ```typescript
