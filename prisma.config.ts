@@ -8,7 +8,7 @@ import "dotenv/config";
  */
 export default defineConfig({
   // Point to your schema file location
-  schema: "prisma/schema.prisma",
+  schema: "src/shared/db/schema.prisma",
 
   // Configure database connection using the type-safe env helper
   datasource: {
@@ -17,6 +17,6 @@ export default defineConfig({
 
   // Migration and Seeding configuration
   migrations: {
-    path: "prisma/migrations",
+    path: "src/shared/db/migrations",
   },
 });

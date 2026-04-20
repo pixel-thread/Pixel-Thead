@@ -4,6 +4,7 @@ node_modules/
 
 # Build output
 dist/
+index.cjs
 
 # Environment
 .env
@@ -29,3 +30,9 @@ Thumbs.db
 src/shared/db/generated/
 .vercel
 out
+
+# clerk configuration (can include secrets)
+/.clerk/
+.next
+next-env.d.ts
+prisma/generated/prisma
