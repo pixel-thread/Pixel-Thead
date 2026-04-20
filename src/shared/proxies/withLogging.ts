@@ -10,7 +10,9 @@ export const withLogging: ProxyFactory = (next: NextMiddleware) => {
     const start = Date.now();
     const { method, nextUrl } = request;
 
-    console.log(`[Proxy] ${method} ${nextUrl.pathname} started`);
+    if (process.env.NODE_ENV) {
+      console.log(`[Proxy] ${method} ${nextUrl.pathname} started`);
+    }
 
     const response = await next(request, _next);
 
