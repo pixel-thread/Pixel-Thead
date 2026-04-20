@@ -24,5 +24,5 @@ axiosClient.interceptors.response.use(
       (error.response?.data as any)?.error?.description ?? error.message;
     console.error(`[Axios] Error ${status}: ${message}`);
     return Promise.reject(error);
-  },
+  }
 );

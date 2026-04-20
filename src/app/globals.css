@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: hsl(240 5.9% 90%);
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(240 10% 3.9%);
+  --color-primary: hsl(240 5.9% 10%);
+
+  /* Modern Typography - Outfit for a premium tech feel */
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-lg: 0.5rem;
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: white;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

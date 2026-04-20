@@ -1,0 +1,91 @@
+generator client {
+  engineType = "binary"
+  provider = "prisma-client-js"
+  output = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── Enums ────────────────────────────────────────────────────
+
+enum OrderStatus {
+  CREATED   // Order created in Razorpay, awaiting payment
+  ATTEMPTED // Payment attempted but not confirmed
+  PAID      // Payment captured and verified
+  FAILED    // Payment failed
+  REFUNDED  // Order has been refunded
+}
+
+enum PaymentStatus {
+  VERIFIED // Signature verified server-side
+  REFUNDED // Payment refunded
+}
+
+enum WebhookEventStatus {
+  RECEIVED  // Event received and stored, not yet processed
+  PROCESSED // Successfully processed
+  FAILED    // Processing error — eligible for retry
+}
+
+// ── Models ───────────────────────────────────────────────────
+
+model Order {
+  id              String      @id @default(cuid())
+  razorpayOrderId String      @unique
+  amount          Int         // Always in paise (Rs 1 = 100 paise)
+  currency        String      @default("INR")
+  receipt         String
+  status          OrderStatus @default(CREATED)
+  app             String      // e.g. "web-app-1"
+  userId          String      // Clerk userId
+  productId       String      // App-defined product reference
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  payment Payment? // One-to-one relation
+
+  @@index([userId])
+  @@index([app])
+  @@index([userId, app])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  razorpayPaymentId String        @unique
+  razorpayOrderId   String        // Denormalized for direct lookups
+  orderId           String        @unique // FK -> Order
+  signature         String        // HMAC-SHA256 proof of verification
+  status            PaymentStatus @default(VERIFIED)
+  verifiedAt        DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([razorpayOrderId])
+  @@map("payments")
+}
+
+model WebhookEvent {
+  id              String             @id @default(cuid())
+  razorpayEventId String
+  eventType       String             // e.g. "payment.captured"
+  app             String             // Extracted from notes.app
+  rawPayload      String             @db.Text // Full raw JSON for replay/debugging
+  status          WebhookEventStatus @default(RECEIVED)
+  processedAt     DateTime?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@unique([razorpayEventId, eventType]) // Composite unique for DB-level idempotency
+  @@index([app])
+  @@index([status])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("webhook_events")
+}

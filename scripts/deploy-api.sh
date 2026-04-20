@@ -15,10 +15,10 @@ pnpm install
 
 echo -e "${YELLOW}🏗️ Building standalone production bundle into /dist...${NC}"
 # This runs db:generate, esbuild bundling, and file sync (package.json/prisma)
-pnpm run build:dist
+vercel build -- prod
 
 echo -e "${YELLOW}⬆️ Deploying to Vercel from /dist folder...${NC}"
 # We deploy the 'dist' directory directly as a production release
-vercel deploy ./dist --prod --yes
+vercel deploy --prebuilt --prod --yes --logs
 
 echo -e "${GREEN}✅ Deployment complete! Your Hono service is live.${NC}"
