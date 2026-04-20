@@ -1,4 +1,10 @@
+"use client";
+import { useAuth } from "@clerk/nextjs";
+
 export default function LandingPage() {
+  const { getToken } = useAuth();
+  const token = getToken();
+  console.log(!!token ? token : "false");
   return (
     <main className="fixed inset-0 bg-white flex flex-col items-center justify-center overflow-hidden selection:bg-slate-900 selection:text-white antialiased">
       {/* Dynamic Grid Pattern */}

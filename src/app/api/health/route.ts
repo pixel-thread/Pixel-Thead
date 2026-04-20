@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { handleMethodNotAllowed } from "@/shared/lib/errorHandler";
 
 export async function GET() {
   return NextResponse.json({
@@ -7,3 +8,6 @@ export async function GET() {
     service: "pixel-thread",
   });
 }
+
+// Spread the shared handlers (POST, PUT, PATCH, DELETE)
+export const { POST, PUT, PATCH, DELETE } = handleMethodNotAllowed;

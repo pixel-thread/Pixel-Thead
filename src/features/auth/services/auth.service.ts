@@ -1,6 +1,7 @@
 import { createClerkClient } from "@clerk/backend";
 import { env } from "@/shared/config/env";
 import { NotFoundError, UnauthorizedError } from "@/shared/lib/errors";
+import { ApiResponse } from "@/shared/utils/response.util";
 
 const clerk = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
 
@@ -15,7 +16,7 @@ export class AuthService {
       throw new NotFoundError("User account not found.");
     }
 
-    return {
+    const data = {
       id: user.id,
       email: user.emailAddresses?.find(
         (e) => e.id === user.primaryEmailAddressId
@@ -26,6 +27,8 @@ export class AuthService {
       publicMetadata: user.publicMetadata,
       createdAt: user.createdAt,
     };
+
+    return ApiResponse.success(data, "User Verified.");
   }
 
   /**

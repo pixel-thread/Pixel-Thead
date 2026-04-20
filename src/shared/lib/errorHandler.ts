@@ -64,10 +64,35 @@ export function handleError(options: ApiErrorOptions | Error | unknown) {
 /**
  * Higher-order wrapper specifically for API route catch blocks
  */
-export const withErrorHandler = (fn: Function) => async (...args: any[]) => {
-  try {
-    return await fn(...args);
-  } catch (error) {
-    return handleError(error);
-  }
+
+export const withErrorHandler =
+  // eslint-disable-next-line
+  (fn: Function) =>
+    // eslint-disable-next-line
+    async (...args: any[]) => {
+      try {
+        return await fn(...args);
+      } catch (error) {
+        return handleError(error);
+      }
+    };
+
+/**
+ * Shared utility to handle unsupported HTTP methods
+ */
+export const methodNotAllowed = (method: string) =>
+  withErrorHandler(async () => {
+    throw new AppError(`Method ${method} not allowed`, 405, "METHOD_NOT_ALLOWED");
+  });
+
+/**
+ * Common method handlers to spread into route files
+ * Usage: ...handleMethodNotAllowed
+ */
+export const handleMethodNotAllowed = {
+  POST: methodNotAllowed("POST"),
+  PUT: methodNotAllowed("PUT"),
+  PATCH: methodNotAllowed("PATCH"),
+  DELETE: methodNotAllowed("DELETE"),
+  GET: methodNotAllowed("GET"),
 };

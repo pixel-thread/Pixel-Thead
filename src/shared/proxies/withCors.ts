@@ -5,53 +5,72 @@ import {
   NextResponse,
 } from "next/server";
 import { ProxyFactory } from "./stackProxies";
+import { env } from "../config/env";
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  // Add other production domains here
-];
-
+/**
+ * withCors Proxy Factory
+ * Dynamically handles CORS based on environment configuration.
+ * Uses ALLOWED_ORIGINS from env.ts for production safety.
+ */
 export const withCors: ProxyFactory = (next: NextMiddleware) => {
   return async (request: NextRequest, _next: NextFetchEvent) => {
     const origin = request.headers.get("origin");
 
-    // Handle preflight requests
+    // Define base allowed origins. Always include local dev.
+    const baseOrigins = ["http://localhost:3000", "http://localhost:3001"];
+
+    // Combine with production origins from ENV
+    const allowedOrigins = [...baseOrigins, ...(env.ALLOWED_ORIGINS || [])];
+
+    // Determine if the current origin is permitted
+    const isAllowed =
+      origin &&
+      (allowedOrigins.includes(origin) || allowedOrigins.includes("*"));
+
+    // 1. Handle PREFLIGHT (OPTIONS) requests
     if (request.method === "OPTIONS") {
       const response = new NextResponse(null, { status: 204 });
 
-      if (origin && allowedOrigins.includes(origin)) {
+      if (origin && isAllowed) {
         response.headers.set("Access-Control-Allow-Origin", origin);
+        response.headers.set("Access-Control-Allow-Credentials", "true");
+      } else if (allowedOrigins.includes("*")) {
+        response.headers.set("Access-Control-Allow-Origin", "*");
       }
 
       response.headers.set(
         "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, OPTIONS"
+        "GET, POST, PUT, DELETE, PATCH, OPTIONS"
       );
       response.headers.set(
         "Access-Control-Allow-Headers",
-        "Content-Type, Authorization"
+        "Content-Type, Authorization, x-user-id, x-client-type"
       );
-      response.headers.set("Access-Control-Max-Age", "86400");
+      response.headers.set("Access-Control-Max-Age", "86400"); // 24 hours
 
       return response;
     }
 
-    // Handle actual requests
+    // 2. Handle ACTUAL requests
     const response = await next(request, _next);
 
-    if (origin && allowedOrigins.includes(origin)) {
+    if (origin && isAllowed) {
       response?.headers.set("Access-Control-Allow-Origin", origin);
-      response?.headers.set(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, OPTIONS"
-      );
-      response?.headers.set(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization"
-      );
       response?.headers.set("Access-Control-Allow-Credentials", "true");
+    } else if (!origin && allowedOrigins.includes("*")) {
+      // For non-browser requests/SDKs if * is set
+      response?.headers.set("Access-Control-Allow-Origin", "*");
     }
+
+    // Common CORS headers for actual responses
+    response?.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    );
+    response?.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, x-user-id, x-client-type"
+    );
 
     return response;
   };
