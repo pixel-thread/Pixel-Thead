@@ -1,0 +1,12 @@
+###
+# @name health
+GET {{SERVICE_BASE_URL}}/api/health
+
+###
+# @name login credentails
+POST {{SERVICE_BASE_URL}}/api/auth/credentials
+
+{
+  "email": "test@gmail.com",
+  "password": "password"
+}

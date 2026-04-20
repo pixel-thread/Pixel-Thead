@@ -926,7 +926,7 @@ export const verifyService = {
 **File:** `features/payments/repositories/order.repository.ts`
 
 ```typescript
-import { prisma } from "../../../shared/db/prisma";
+import { prisma } from "@db/prisma";
 import { OrderStatus } from "@prisma/client";
 
 export const orderRepository = {
@@ -976,7 +976,7 @@ export const orderRepository = {
 **File:** `features/payments/repositories/payment.repository.ts`
 
 ```typescript
-import { prisma } from "../../../shared/db/prisma";
+import { prisma } from "@db/prisma";
 import { PaymentStatus } from "@prisma/client";
 
 export const paymentRepository = {
@@ -1205,7 +1205,7 @@ export const routerService = {
 **File:** `features/webhook/repositories/webhookEvent.repository.ts`
 
 ```typescript
-import { prisma } from "../../../shared/db/prisma";
+import { prisma } from "@db/prisma";
 import { WebhookEventStatus } from "@prisma/client";
 
 export const webhookEventRepository = {
