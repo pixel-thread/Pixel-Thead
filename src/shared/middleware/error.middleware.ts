@@ -10,18 +10,7 @@ export function registerErrorHandlers(app: Hono<{ Variables: HonoVariables }>) {
   app.onError((err, c) => {
     // Handle known Prisma request errors
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      if (err.code === "P2002") {
-        return c.json(
-          {
-            success: false,
-            error: "Duplicate record — this entry already exists.",
-          },
-          409,
-        );
-      }
-      if (err.code === "P2025") {
-        return c.json({ success: false, error: "Record not found." }, 404);
-      }
+      return c.json({ success: false, error: "Data not found." }, 404);
     }
 
     // Handle Prisma initialization errors (DB connection failures)

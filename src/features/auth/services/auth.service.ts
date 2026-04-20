@@ -46,7 +46,7 @@ export class AuthService {
       return ApiResponse.success({
         message: "User created successfully.",
         userId: user.id,
-      }, 201);
+      });
     } catch (error: any) {
       return ApiResponse.error(error.message || "Signup failed", 400);
     }
@@ -65,7 +65,9 @@ export class AuthService {
 
       if (!user) {
         // Obfuscate for security: return success even if user not found
-        return ApiResponse.success({ message: "Reset instructions sent if account exists." });
+        return ApiResponse.success({
+          message: "Reset instructions sent if account exists.",
+        });
       }
 
       // Note: Full headless password reset requires specialized Clerk settings
@@ -74,7 +76,10 @@ export class AuthService {
         userId: user.id,
       });
     } catch (error: any) {
-      return ApiResponse.error(error.message || "Failed to initiate reset", 500);
+      return ApiResponse.error(
+        error.message || "Failed to initiate reset",
+        500,
+      );
     }
   }
 }
