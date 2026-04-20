@@ -1,12 +1,9 @@
 ###
 # @name health
-GET {{SERVICE_BASE_URL}}/api/health
+GET {{SERVICE_BASE_URL}}/health
 
 ###
-# @name login credentails
-POST {{SERVICE_BASE_URL}}/api/auth/credentials
+# @name me
+GET {{SERVICE_BASE_URL}}/auth/me
+AUTHORIZATION: Bearer {{ACCESS_TOKEN}}
 
-{
-  "email": "test@gmail.com",
-  "password": "password"
-}

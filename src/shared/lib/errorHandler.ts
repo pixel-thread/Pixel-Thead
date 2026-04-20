@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { AppError } from "./errors";
 
 export interface ApiErrorOptions {
   message: string;
@@ -25,6 +26,10 @@ export function handleError(options: ApiErrorOptions | Error | unknown) {
     status = 400;
     code = "VALIDATION_ERROR";
     details = options.issues;
+  } else if (options instanceof AppError) {
+    message = options.message;
+    status = options.status;
+    code = options.code;
   } else if (options instanceof Error) {
     message = options.message;
     // Check for custom status on error object if exists
@@ -59,12 +64,10 @@ export function handleError(options: ApiErrorOptions | Error | unknown) {
 /**
  * Higher-order wrapper specifically for API route catch blocks
  */
-export const withErrorHandler =
-  (fn: Function) =>
-  async (...args: any[]) => {
-    try {
-      return await fn(...args);
-    } catch (error) {
-      return handleError(error);
-    }
-  };
+export const withErrorHandler = (fn: Function) => async (...args: any[]) => {
+  try {
+    return await fn(...args);
+  } catch (error) {
+    return handleError(error);
+  }
+};

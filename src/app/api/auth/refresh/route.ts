@@ -1,17 +1,24 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { AuthService } from "@/features/auth/services/auth.service";
-import { handleError } from "@/shared/lib/errorHandler";
-import { withValidation } from "@/lib/validation/withValidation";
+import { withErrorHandler } from "@/shared/lib/errorHandler";
+import { ApiResponse } from "@/shared/utils/response.util";
+import { UnauthorizedError } from "@/shared/lib/errors";
 
-export const POST = withValidation({}, async () => {
+export const dynamic = "force-dynamic";
+
+/**
+ * POST /api/auth/refresh
+ * Re-issues a fresh JWT for the currently authenticated user.
+ */
+export const POST = withErrorHandler(async () => {
   const { userId } = await auth();
 
   if (!userId) {
-    return handleError({ message: "Unauthorized", status: 401 });
+    throw new UnauthorizedError("Session expired. Identity could not be verified.");
   }
 
-  const response = await AuthService.refreshToken(userId);
+  const { token } = await AuthService.refreshToken(userId);
 
-  return NextResponse.json(response, { status: 200 });
+  return NextResponse.json(ApiResponse.success({ token }));
 });

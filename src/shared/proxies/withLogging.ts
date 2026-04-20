@@ -1,4 +1,8 @@
-import { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
+import {
+  NextFetchEvent,
+  NextProxy as NextMiddleware,
+  NextRequest,
+} from "next/server";
 import { ProxyFactory } from "./stackProxies";
 
 export const withLogging: ProxyFactory = (next: NextMiddleware) => {

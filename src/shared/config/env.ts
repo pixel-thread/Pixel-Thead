@@ -25,7 +25,7 @@ const envSchema = z.object({
     .default("https://api.razorpay.com/v1"),
 
   CLERK_SECRET_KEY: z.string().min(1).trim(),
-  CLERK_PUBLISHABLE_KEY: z.string().min(1).trim(),
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1).trim(),
   CLERK_JWT_ISSUER: z.string().url().trim(),
 
   ALLOWED_ORIGINS: z
