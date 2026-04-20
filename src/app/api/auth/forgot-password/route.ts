@@ -6,7 +6,7 @@ import { AuthService } from "@/features/auth/services/auth.service";
 export const POST = withValidation(
   { body: forgotPasswordSchema },
   async ({ body }) => {
-    const response = await AuthService.initiatePasswordReset(body!.email);
+    const response = await AuthService.initiatePasswordReset(body.email);
     return NextResponse.json(response);
   }
 );
