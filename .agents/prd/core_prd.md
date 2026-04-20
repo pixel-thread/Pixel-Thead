@@ -2251,7 +2251,7 @@ jobs:
       RAZORPAY_KEY_ID: rzp_test_xxx
       RAZORPAY_KEY_SECRET: test_secret
       RAZORPAY_WEBHOOK_SECRET: test_webhook_secret
-      CLERK_SECRET_KEY: sk_test_xxx
+      CLERK_SECRET_KEY: test_xxx
       CLERK_JWT_ISSUER: https://clerk.test.com
       SERVICE_BASE_URL: http://localhost:3000
       ALLOWED_ORIGINS: http://localhost:3000
