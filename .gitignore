@@ -27,3 +27,4 @@ Thumbs.db
 *.log
 
 src/shared/db/generated/
+.vercel
