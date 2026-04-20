@@ -1,5 +1,5 @@
 import { prisma } from "@db/prisma";
-import { OrderStatus } from "@db/generated";
+import { OrderStatus } from "@prisma/client";
 
 export const orderRepository = {
   async create(data: {

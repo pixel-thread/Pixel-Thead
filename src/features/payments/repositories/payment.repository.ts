@@ -1,5 +1,5 @@
 import { prisma } from "@db/prisma";
-import { PaymentStatus } from "@db/generated";
+import { PaymentStatus } from "@prisma/client";
 
 export const paymentRepository = {
   async create(data: {

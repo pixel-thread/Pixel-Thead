@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Color output
+# Color output for better visibility in logs
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -8,19 +8,17 @@ NC='\033[0m' # No Color
 
 set -e
 
-echo -e "${YELLOW}Installing fresh dependencies...${NC}"
+echo -e "${YELLOW}🚀 Starting deployment pipeline...${NC}"
+
+echo -e "${YELLOW}📦 Installing fresh dependencies...${NC}"
 pnpm install
 
-echo -e "${YELLOW}Running generate...${NC}"
-pnpm run db:generate
+echo -e "${YELLOW}🏗️ Building standalone production bundle into /dist...${NC}"
+# This runs db:generate, esbuild bundling, and file sync (package.json/prisma)
+pnpm run build:dist
 
-echo -e "${YELLOW}Running database generate...${NC}"
-pnpm run db:generate
+echo -e "${YELLOW}⬆️ Deploying to Vercel from /dist folder...${NC}"
+# We deploy the 'dist' directory directly as a production release
+vercel deploy ./dist --prod --yes
 
-echo -e "${YELLOW}Building project with Vercel...${NC}"
-vercel build --prod 
-
-echo -e "${YELLOW}Deploying to Vercel...${NC}"
-vercel deploy --prebuilt --prod 
-
-echo -e "${GREEN}Deployment complete!${NC}"
+echo -e "${GREEN}✅ Deployment complete! Your Hono service is live.${NC}"

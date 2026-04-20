@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { Prisma } from "@db/generated";
+import { Prisma } from "@prisma/client";
 import { HonoVariables } from "@/shared/types/hono.types";
 
 export function registerErrorHandlers(app: Hono<{ Variables: HonoVariables }>) {

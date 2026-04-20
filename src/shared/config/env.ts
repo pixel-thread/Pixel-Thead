@@ -44,10 +44,14 @@ export const env = (() => {
       const errorMessage = Object.entries(fieldErrors)
         .map(([field, errors]) => `  - ${field}: ${errors?.join(", ")}`)
         .join("\n");
-      console.error(`\n❌ Invalid environment variables:\n${errorMessage}\n`);
+      
+      console.error(`\n❌ MISSING ENVIRONMENT VARIABLES:\n${errorMessage}\n`);
+      console.error("Please ensure these are set in Vercel Dashboard Settings > Environment Variables.");
     } else {
-      console.error("\n❌ Unknown error during environment validation\n");
+      console.error("\n❌ UNKNOWN ERROR DURING ENVIRONMENT VALIDATION:", err);
     }
-    throw err; // unreachable but satisfies TS
+    // We still re-throw to prevent the app from running in an invalid state,
+    // but the error message is now in the logs.
+    throw new Error("Invalid project configuration. Check Vercel logs for details.");
   }
 })();

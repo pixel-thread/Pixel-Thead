@@ -1,5 +1,5 @@
 import { prisma } from "@db/prisma";
-import { WebhookEventStatus } from "@db/generated";
+import { WebhookEventStatus } from "@prisma/client";
 
 export const webhookEventRepository = {
   async create(data: {
